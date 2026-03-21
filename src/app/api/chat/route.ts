@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
       const errText = await upstreamRes.text().catch(() => "unknown error");
       console.error("[chat API] upstream error:", upstreamRes.status, errText);
       return NextResponse.json(
-        { error: `AI 服务暂时不可用 (${upstreamRes.status})` },
+        { error: `AI 服务暂时不可用 (${upstreamRes.status})`, detail: errText },
         { status: 502 }
       );
     }
