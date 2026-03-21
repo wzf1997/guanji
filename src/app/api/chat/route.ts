@@ -50,7 +50,9 @@ export async function POST(req: NextRequest) {
 
     const apiUrl = process.env.DEEPSEEK_API_URL || "https://api.deepseek.com/chat/completions";
     const apiKey = process.env.DEEPSEEK_API_KEY!;
-    const model = process.env.DEEPSEEK_MODEL || "deepseek-chat";
+    const model = (process.env.DEEPSEEK_MODEL || "deepseek-chat").trim();
+
+    console.log("[chat API] url:", apiUrl, "model:", model, "key prefix:", apiKey?.slice(0, 8));
 
     const upstreamRes = await fetch(apiUrl, {
       method: "POST",
