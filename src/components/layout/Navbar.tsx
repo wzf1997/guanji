@@ -14,7 +14,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "今日运势", href: "/fortune" },
   { label: "八字排盘", href: "/bazi" },
   { label: "AI命理师", href: "/ai-chat" },
-  { label: "测试中心", href: "/quiz" },
 ];
 
 export default function Navbar() {
