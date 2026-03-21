@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────
+   Design System CSS Variables
+───────────────────────────────────────────── */
+:root {
+  --primary:          #5749F4;
+  --primary-hover:    #4438E0;
+  --primary-light:    rgba(87, 73, 244, 0.12);
+
+  --background:       #0d0b1e;
+  --foreground:       #ffffff;
+  --card:             #13102a;
+  --border:           rgba(255, 255, 255, 0.08);
+  --muted:            #1e1a3a;
+  --muted-foreground: rgba(255, 255, 255, 0.45);
+
+  /* Gold accent */
+  --gold:             #F59E0B;
+  --gold-light:       rgba(245, 158, 11, 0.12);
+}
+
+/* ─────────────────────────────────────────────
+   Base Reset
+───────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─────────────────────────────────────────────
+   Scrollbar hide utility
+───────────────────────────────────────────── */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─────────────────────────────────────────────
+   Serif font utility (fallback to system serif)
+───────────────────────────────────────────── */
+.font-serif {
+  font-family: "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun",
+    Georgia, "Times New Roman", serif;
+}
+
+/* ─────────────────────────────────────────────
+   Selection color
+───────────────────────────────────────────── */
+::selection {
+  background-color: rgba(87, 73, 244, 0.35);
+  color: #ffffff;
+}
