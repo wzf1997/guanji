@@ -6,8 +6,7 @@
 
 ![观己界面预览](./public/page.png)
 
----
-
+## ![体验链接](https://guanji.vercel.app/)
 
 ## 目录
 
@@ -27,15 +26,15 @@
 
 ### 核心模块
 
-| 模块 | 路由 | 描述 |
-|------|------|------|
-| 每日运势 | `/fortune` | 基于今日干支由 AI 生成全局缓存运势，含事业、财运、感情、健康四维解读 |
-| 八字排盘 | `/bazi` | 输入生辰八字，AI 给出四柱、日主、五行平衡度及命盘分析，支持农历/公历 |
-| MBTI 测试 | `/mbti` | 60 道题测出 16 种人格类型，并与五行体系融合解读 |
-| 星座罗盘 | `/zodiac` | 12 星座每日运势，星座与五行互相印证 |
-| AI 命理师 | `/ai-chat` | 与 AI 命理师「玄机」深度对话，结合个人命盘做个性化解读 |
-| 个人档案 | `/profile` | 管理账号信息、查看八字历史、追踪 AI 对话配额 |
-| 会员中心 | `/membership` | 订阅基础版或专业版，解锁更多对话次数和高级功能 |
+| 模块      | 路由          | 描述                                                                 |
+| --------- | ------------- | -------------------------------------------------------------------- |
+| 每日运势  | `/fortune`    | 基于今日干支由 AI 生成全局缓存运势，含事业、财运、感情、健康四维解读 |
+| 八字排盘  | `/bazi`       | 输入生辰八字，AI 给出四柱、日主、五行平衡度及命盘分析，支持农历/公历 |
+| MBTI 测试 | `/mbti`       | 60 道题测出 16 种人格类型，并与五行体系融合解读                      |
+| 星座罗盘  | `/zodiac`     | 12 星座每日运势，星座与五行互相印证                                  |
+| AI 命理师 | `/ai-chat`    | 与 AI 命理师「玄机」深度对话，结合个人命盘做个性化解读               |
+| 个人档案  | `/profile`    | 管理账号信息、查看八字历史、追踪 AI 对话配额                         |
+| 会员中心  | `/membership` | 订阅基础版或专业版，解锁更多对话次数和高级功能                       |
 
 ### 核心技术亮点
 
@@ -49,17 +48,17 @@
 
 ## 技术栈
 
-| 层级 | 技术 |
-|------|------|
-| **框架** | [Next.js 14](https://nextjs.org/) (App Router) |
-| **语言** | TypeScript |
-| **样式** | Tailwind CSS + 自定义 CSS 动画 |
+| 层级         | 技术                                                               |
+| ------------ | ------------------------------------------------------------------ |
+| **框架**     | [Next.js 14](https://nextjs.org/) (App Router)                     |
+| **语言**     | TypeScript                                                         |
+| **样式**     | Tailwind CSS + 自定义 CSS 动画                                     |
 | **状态管理** | [Zustand](https://github.com/pmndrs/zustand) + localStorage 持久化 |
-| **认证** | [NextAuth.js v4](https://next-auth.js.org/) |
-| **数据库** | [Supabase](https://supabase.com/) (PostgreSQL + RLS) |
-| **AI** | [DeepSeek API](https://www.deepseek.com/) (`deepseek-chat` 模型) |
-| **图标** | [Lucide React](https://lucide.dev/) |
-| **部署** | [Vercel](https://vercel.com/) |
+| **认证**     | [NextAuth.js v4](https://next-auth.js.org/)                        |
+| **数据库**   | [Supabase](https://supabase.com/) (PostgreSQL + RLS)               |
+| **AI**       | [DeepSeek API](https://www.deepseek.com/) (`deepseek-chat` 模型)   |
+| **图标**     | [Lucide React](https://lucide.dev/)                                |
+| **部署**     | [Vercel](https://vercel.com/)                                      |
 
 ---
 
@@ -199,19 +198,19 @@ DEEPSEEK_MODEL=deepseek-chat
 
 ### 数据表
 
-| 表名 | 描述 |
-|------|------|
-| `users` | 用户账号（OAuth 同步，含配额、会员等级） |
-| `bazi_charts` | 八字命盘排盘历史 |
-| `chat_sessions` | AI 对话会话 |
-| `chat_messages` | 对话消息记录 |
-| `fortune_cache` | 每日运势全局缓存 |
-| `user_fortune_views` | 用户运势查看记录 |
-| `zodiac_fortune_cache` | 星座每日运势缓存 |
-| `mbti_results` | MBTI 测试结果（支持匿名） |
-| `membership_plans` | 会员套餐配置 |
-| `orders` | 支付订单（预留微信/支付宝） |
-| `ai_usage_logs` | AI 调用日志（监控 & 计费） |
+| 表名                   | 描述                                     |
+| ---------------------- | ---------------------------------------- |
+| `users`                | 用户账号（OAuth 同步，含配额、会员等级） |
+| `bazi_charts`          | 八字命盘排盘历史                         |
+| `chat_sessions`        | AI 对话会话                              |
+| `chat_messages`        | 对话消息记录                             |
+| `fortune_cache`        | 每日运势全局缓存                         |
+| `user_fortune_views`   | 用户运势查看记录                         |
+| `zodiac_fortune_cache` | 星座每日运势缓存                         |
+| `mbti_results`         | MBTI 测试结果（支持匿名）                |
+| `membership_plans`     | 会员套餐配置                             |
+| `orders`               | 支付订单（预留微信/支付宝）              |
+| `ai_usage_logs`        | AI 调用日志（监控 & 计费）               |
 
 ### 关键数据库函数
 
@@ -313,11 +312,11 @@ Authorization: 需要登录
 
 ## 会员体系
 
-| 等级 | 每日 AI 对话次数 | 价格 |
-|------|----------------|------|
-| 免费版 | 3 次 | 免费 |
-| 基础版 | 30 次 | ¥19.90/月 |
-| 专业版 | 无限 | ¥49.90/月 |
+| 等级   | 每日 AI 对话次数 | 价格      |
+| ------ | ---------------- | --------- |
+| 免费版 | 3 次             | 免费      |
+| 基础版 | 30 次            | ¥19.90/月 |
+| 专业版 | 无限             | ¥49.90/月 |
 
 专业版用户在配额检查时直接返回成功，不进行实际扣减。
 
