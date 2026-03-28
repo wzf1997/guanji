@@ -60,16 +60,16 @@ export default function ChatInput({
     <div className="border-t border-[var(--border)] bg-[var(--card)] px-4 pt-3 pb-safe-or-4">
       {/* 次数耗尽横幅 */}
       {remainingCount === 0 && (
-        <div className="mb-3 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 dark:from-amber-950/20 dark:to-orange-950/20 dark:border-amber-800 px-4 py-3 flex items-center justify-between">
+        <div className="mb-3 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 px-4 py-3 flex items-center justify-between">
           <div>
-            <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">
+            <p className="text-sm font-semibold text-amber-300">
               今日对话次数已用完
             </p>
-            <p className="text-xs text-amber-600 dark:text-amber-400 mt-0.5">
+            <p className="text-xs text-amber-400/70 mt-0.5">
               升级会员，享受无限次命理咨询
             </p>
           </div>
-          <button className="flex-shrink-0 ml-3 px-3 py-1.5 rounded-lg bg-amber-500 text-white text-xs font-semibold hover:bg-amber-600 transition-colors">
+          <button className="flex-shrink-0 ml-3 px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-semibold hover:opacity-90 transition-all">
             升级会员
           </button>
         </div>

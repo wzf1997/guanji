@@ -13,6 +13,9 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { label: "今日运势", href: "/fortune" },
   { label: "八字排盘", href: "/bazi" },
+  { label: "MBTI测试", href: "/mbti" },
+  { label: "星座罗盘", href: "/zodiac" },
+  { label: "缘分配对", href: "/match" },
   { label: "AI命理师", href: "/ai-chat" },
 ];
 

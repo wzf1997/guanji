@@ -68,3 +68,152 @@ body {
   background-color: rgba(87, 73, 244, 0.35);
   color: #ffffff;
 }
+
+/* ═════════════════════════════════════════════
+   Motion Design — Keyframes
+   全部基于 transform / opacity 实现，
+   避免触发 layout 或 paint，GPU 合成层友好。
+═════════════════════════════════════════════ */
+
+/* Hero 入场：淡入 + 向上位移 20px */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 星点闪烁 A：小星星，快速不规则闪烁 */
+@keyframes twinkleA {
+  0%   { opacity: 0.15; }
+  20%  { opacity: 0.85; }
+  40%  { opacity: 0.30; }
+  60%  { opacity: 1.00; }
+  80%  { opacity: 0.45; }
+  100% { opacity: 0.70; }
+}
+
+/* 星点闪烁 B：中星星，慢速深呼吸 */
+@keyframes twinkleB {
+  0%   { opacity: 0.40; }
+  35%  { opacity: 1.00; }
+  65%  { opacity: 0.55; }
+  100% { opacity: 0.90; }
+}
+
+/* 星点闪烁 C：大亮星，爆闪感，带 scale */
+@keyframes twinkleC {
+  0%   { opacity: 0.20; transform: scale(0.8); }
+  30%  { opacity: 1.00; transform: scale(1.3); }
+  60%  { opacity: 0.50; transform: scale(0.9); }
+  100% { opacity: 0.90; transform: scale(1.1); }
+}
+
+/* 向下兼容旧 twinkle 工具类（Hero 内散点星用） */
+@keyframes twinkle {
+  0%   { opacity: 0.15; }
+  20%  { opacity: 0.85; }
+  40%  { opacity: 0.30; }
+  60%  { opacity: 1.00; }
+  80%  { opacity: 0.45; }
+  100% { opacity: 0.70; }
+}
+
+/* 八卦环缓慢顺时针旋转：60s 一圈 */
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Shimmer 扫光：光条从左侧扫入再扫出 */
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to   { background-position:  200% center; }
+}
+
+/* 呼吸光晕：scale 0.95 ↔ 1.05，alternate 来回 */
+@keyframes pulseGlow {
+  from { transform: scale(0.95); opacity: 0.6; }
+  to   { transform: scale(1.05); opacity: 1;   }
+}
+
+/* ═════════════════════════════════════════════
+   Motion Design — 工具类
+═════════════════════════════════════════════ */
+
+/* Hero 入场动画
+   duration: 0.6s | easing: spring cubic-bezier(0.16,1,0.3,1)
+   both: 保持 from/to 终态；animationDelay 由各元素 inline style 设置 */
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* 星点闪烁：duration 通过 --twinkle-duration CSS 变量按元素定制 */
+.animate-twinkle {
+  animation: twinkle var(--twinkle-duration, 3s) ease-in-out infinite;
+}
+
+/* 八卦环旋转：30s 匀速一圈（提升可见旋转感） */
+.animate-rotate-slow {
+  animation: rotateSlow 30s linear infinite;
+}
+
+/* 呼吸光晕：4s ease-in-out alternate infinite */
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite alternate;
+}
+
+/* Feature 卡片顶部 shimmer 扫光条
+   默认静止（光条停在左侧）；.group:hover 时触发 0.8s 扫光
+   父容器须含 group className（page.tsx 原有） */
+.feature-card-bar {
+  background: linear-gradient(
+    90deg,
+    transparent               0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent               100%
+  );
+  background-size: 200% 100%;
+  background-position: -200% center;
+}
+
+.group:hover .feature-card-bar {
+  animation: shimmer 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+
+
+/* ═════════════════════════════════════════════
+   Global Star Field — starSparkle keyframe
+   供 StarField.tsx 中每颗四芒星使用。
+   transform 每帧均保留 translate(-50%,-50%)，
+   避免旋转时星星偏离定位中心。
+═════════════════════════════════════════════ */
+
+.star-field-container {
+  --star-scale: 1;
+}
+@media (max-width: 768px) {
+  .star-field-container {
+    --star-scale: 0.6;
+  }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+  .star-field-container {
+    --star-scale: 0.8;
+  }
+}
+.star-sm, .star-md, .star-lg {
+  scale: var(--star-scale);
+}
+
+@keyframes starSparkle {
+  0%   { opacity: 0.10; transform: translate(-50%, -50%) scale(0.6) rotate(0deg);   }
+  30%  { opacity: 0.90; transform: translate(-50%, -50%) scale(1.1) rotate(15deg);  }
+  60%  { opacity: 0.40; transform: translate(-50%, -50%) scale(0.8) rotate(-10deg); }
+  100% { opacity: 1.00; transform: translate(-50%, -50%) scale(1.2) rotate(20deg);  }
+}

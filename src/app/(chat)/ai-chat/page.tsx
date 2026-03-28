@@ -80,6 +80,7 @@ function Sidebar({
   onSelect,
   onNew,
   remainingCount,
+  quotaTotal,
   onClose,
 }: {
   sessions: ChatSession[];
@@ -87,6 +88,7 @@ function Sidebar({
   onSelect: (id: string) => void;
   onNew: () => void;
   remainingCount: number;
+  quotaTotal: number;
   onClose?: () => void;
 }) {
   return (
@@ -162,7 +164,7 @@ function Sidebar({
               className={`h-full rounded-full transition-all ${
                 remainingCount > 5 ? "bg-green-400" : "bg-amber-400"
               }`}
-              style={{ width: `${(remainingCount / 10) * 100}%` }}
+              style={{ width: `${quotaTotal > 0 ? (remainingCount / quotaTotal) * 100 : 0}%` }}
             />
           </div>
         </div>
@@ -192,14 +194,30 @@ export default function AIChatPage() {
   const [inputValue, setInputValue] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
-  const [remainingCount, setRemainingCount] = useState(7);
+  const [remainingCount, setRemainingCount] = useState(10);
+  const [quotaTotal, setQuotaTotal] = useState(10);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const activeSession = allSessions.find((s) => s.id === activeSessionId)!;
 
-  // 滚动到底部
+  const fetchQuota = useCallback(async () => {
+    try {
+      const res = await fetch("/api/user/quota");
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data?.data) {
+        setRemainingCount(data.data.remaining ?? 0);
+        setQuotaTotal(data.data.total ?? 10);
+      }
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    fetchQuota();
+  }, [fetchQuota]);
+
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
@@ -271,6 +289,9 @@ export default function AIChatPage() {
         });
 
         if (!res.ok) {
+          if (res.status === 429) {
+            setRemainingCount(0);
+          }
           const err = await res.json().catch(() => ({ error: "请求失败" }));
           throw new Error(err.error || `HTTP ${res.status}`);
         }
@@ -325,10 +346,10 @@ export default function AIChatPage() {
       } finally {
         setIsStreaming(false);
         setStreamingMessageId(null);
-        if (remainingCount > 0) setRemainingCount((prev) => prev - 1);
+        fetchQuota();
       }
     },
-    [activeSessionId, isStreaming, remainingCount, updateMessages, allSessions]
+    [activeSessionId, isStreaming, remainingCount, updateMessages, allSessions, fetchQuota]
   );
 
   const handleNewSession = useCallback(() => {
@@ -375,6 +396,7 @@ export default function AIChatPage() {
           }}
           onNew={handleNewSession}
           remainingCount={remainingCount}
+          quotaTotal={quotaTotal}
           onClose={() => setSidebarOpen(false)}
         />
       </aside>
@@ -444,25 +466,6 @@ export default function AIChatPage() {
 
           <div ref={messagesEndRef} />
         </div>
-
-        {/* 升级引导横幅（次数耗尽但非输入区） */}
-        {remainingCount === 0 && (
-          <div className="flex-shrink-0 mx-4 mb-2 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-indigo-500 p-px">
-            <div className="rounded-[calc(var(--radius-m)-1px)] bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-950/30 dark:to-indigo-950/30 px-4 py-3 flex items-center justify-between">
-              <div>
-                <p className="text-sm font-bold text-[var(--foreground)]">
-                  升级会员 · 无限对话
-                </p>
-                <p className="text-xs text-[var(--muted-foreground)] mt-0.5">
-                  解锁无限次 AI 命理咨询 + 深度报告特权
-                </p>
-              </div>
-              <button className="flex-shrink-0 ml-3 px-4 py-2 rounded-xl bg-[var(--primary)] text-white text-sm font-semibold hover:opacity-90 active:scale-[0.98] transition-all">
-                立即升级
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* 输入区 */}
         <div className="flex-shrink-0">

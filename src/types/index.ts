@@ -141,6 +141,84 @@ export interface MembershipPlan {
   highlighted: boolean;   // 推荐标识
 }
 
+// ==========================================
+//  MBTI 测试模块
+// ==========================================
+
+export type MbtiType =
+  | "INTJ" | "INTP" | "ENTJ" | "ENTP"
+  | "INFJ" | "INFP" | "ENFJ" | "ENFP"
+  | "ISTJ" | "ISFJ" | "ESTJ" | "ESFJ"
+  | "ISTP" | "ISFP" | "ESTP" | "ESFP";
+
+export type MbtiDimension = "EI" | "SN" | "TF" | "JP";
+
+export interface MbtiDimensionScore {
+  E: number; I: number;  // E + I = 100
+  S: number; N: number;
+  T: number; F: number;
+  J: number; P: number;
+}
+
+export interface MbtiQuestion {
+  id: string;
+  text: string;
+  dimension: MbtiDimension;
+  aLetter: "E" | "S" | "T" | "J"; // 选A倾向的字母
+  optionA: string;
+  optionB: string;
+}
+
+export type MbtiAnswers = Record<string, "A" | "B">; // questionId -> 选项
+
+export interface MbtiResult {
+  id?: string;
+  userId?: string;
+  mbtiType: MbtiType;
+  scores: MbtiDimensionScore;
+  elementAffinity: FiveElement; // 与五行体系联动
+  aiReading?: string;           // AI个性化解读
+  keyTraits?: string[];         // 核心特质关键词
+  compatibleTypes?: MbtiType[]; // 最佳搭配类型
+  createdAt?: string;
+}
+
+// ==========================================
+//  星座罗盘模块
+// ==========================================
+
+export type ZodiacSign =
+  | "aries" | "taurus" | "gemini" | "cancer"
+  | "leo" | "virgo" | "libra" | "scorpio"
+  | "sagittarius" | "capricorn" | "aquarius" | "pisces";
+
+export type ZodiacElementType = "火" | "土" | "风" | "水"; // 西方四元素
+
+export interface ZodiacInfo {
+  sign: ZodiacSign;
+  signCn: string;           // "白羊座"
+  dateRange: string;        // "3月21日 - 4月19日"
+  element: ZodiacElementType;
+  rulingPlanet: string;     // "火星"
+  symbol: string;           // 符号 ♈
+  keyTraits: string[];      // 3-5 个性格关键词
+  fiveElementMap: FiveElement; // 映射到五行（与八字联动）
+  color: string;            // 主题色 hex
+}
+
+export interface ZodiacFortune {
+  sign: ZodiacSign;
+  signCn: string;
+  date: string;             // YYYY-MM-DD
+  overallStars: FortuneLevel;
+  overallSummary: string;
+  dimensions: FortuneItem[]; // 复用现有 FortuneItem
+  luckyColor: string;
+  luckyNumber: number;
+  dailyQuote: string;
+  periodAdvice: string;
+}
+
 // ---- 通用 API 响应 ----
 
 export interface ApiResponse<T = unknown> {

@@ -16,6 +16,7 @@ import {
   Activity,
   ArrowRight,
 } from "lucide-react";
+import StarField from "@/components/layout/StarField";
 
 // ─────────────────────────────────────────────
 // Types
@@ -138,6 +139,21 @@ const VALUE_PROPS: ValueProp[] = [
   },
 ];
 
+// 每颗星的闪烁参数：位置、尺寸、闪烁周期（duration 错落产生自然随机感）
+const STAR_DOTS = [
+  { top: "12%", left:  "8%", size: 2,   duration: "3.2s", delay: "0s"   },
+  { top: "25%", left: "18%", size: 1.5, duration: "2.4s", delay: "0.8s" },
+  { top:  "8%", left: "35%", size: 2.5, duration: "4.0s", delay: "1.6s" },
+  { top: "18%", left: "55%", size: 1.5, duration: "2.8s", delay: "0.4s" },
+  { top: "10%", left: "72%", size: 2,   duration: "3.6s", delay: "2.0s" },
+  { top: "30%", left: "85%", size: 1.5, duration: "2.2s", delay: "1.2s" },
+  { top: "45%", left: "92%", size: 2,   duration: "3.8s", delay: "0.6s" },
+  { top: "60%", left:  "5%", size: 1.5, duration: "2.6s", delay: "1.8s" },
+  { top: "70%", left: "22%", size: 2,   duration: "4.0s", delay: "0.2s" },
+  { top: "80%", left: "65%", size: 1.5, duration: "3.0s", delay: "1.4s" },
+  { top: "55%", left: "48%", size: 3,   duration: "2.0s", delay: "2.2s" },
+] as const;
+
 // ─────────────────────────────────────────────
 // Sub-components
 // ─────────────────────────────────────────────
@@ -167,8 +183,10 @@ function HeroBackground() {
       {/* Base gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0d0b1e] via-[#130f2e] to-[#0d0b1e]" />
 
-      {/* Radial glow — center */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_30%,rgba(87,73,244,0.25),transparent)]" />
+      {/* Radial glow — center（animate-pulse-glow：缓慢呼吸，scale 0.95~1.05） */}
+      <div
+        className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_30%,rgba(87,73,244,0.25),transparent)] animate-pulse-glow"
+      />
 
       {/* Top-left accent */}
       <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-[#5749F4]/10 blur-3xl" />
@@ -185,41 +203,41 @@ function HeroBackground() {
         }}
       />
 
-      {/* Scattered star dots */}
-      {[
-        { top: "12%", left: "8%", size: 2 },
-        { top: "25%", left: "18%", size: 1.5 },
-        { top: "8%",  left: "35%", size: 2.5 },
-        { top: "18%", left: "55%", size: 1.5 },
-        { top: "10%", left: "72%", size: 2 },
-        { top: "30%", left: "85%", size: 1.5 },
-        { top: "45%", left: "92%", size: 2 },
-        { top: "60%", left: "5%",  size: 1.5 },
-        { top: "70%", left: "22%", size: 2 },
-        { top: "80%", left: "65%", size: 1.5 },
-        { top: "55%", left: "48%", size: 3 },
-      ].map((s, i) => (
+      {/* Scattered star dots（animate-twinkle：各星独立闪烁周期） */}
+      {STAR_DOTS.map((s, i) => (
         <div
           key={i}
-          className="absolute rounded-full bg-white"
+          className="star-dot absolute rounded-full bg-white animate-twinkle"
           style={{
             top: s.top,
             left: s.left,
             width: s.size,
             height: s.size,
-            opacity: 0.4 + (i % 3) * 0.15,
             boxShadow: `0 0 ${s.size * 3}px rgba(255,255,255,0.6)`,
+            ["--twinkle-duration" as string]: s.duration,
+            animationDelay: s.delay,
           }}
         />
       ))}
 
-      {/* Bagua ring — decorative SVG */}
-      <div className="absolute right-[8%] top-[15%] opacity-[0.06]">
+      {/* 轮盘外发光环：脉冲光晕，不旋转，只做 pulseGlow，营造"能量环"效果 */}
+      <div
+        className="absolute right-[8%] top-[15%] w-80 h-80 rounded-full animate-pulse-glow pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(87,73,244,0.15) 0%, rgba(87,73,244,0.05) 50%, transparent 70%)',
+          filter: 'blur(20px)',
+        }}
+      />
+
+      {/* Bagua ring — animate-rotate-slow（30s 顺时针一圈，opacity 提升到 0.18，加发光 filter） */}
+      <div
+        className="bagua-ring absolute right-[8%] top-[15%] opacity-[0.18] animate-rotate-slow"
+        style={{ filter: 'drop-shadow(0 0 12px rgba(139,124,246,0.8)) drop-shadow(0 0 30px rgba(87,73,244,0.4))' }}
+      >
         <svg width="320" height="320" viewBox="0 0 320 320" fill="none">
           <circle cx="160" cy="160" r="155" stroke="white" strokeWidth="1" strokeDasharray="6 4" />
           <circle cx="160" cy="160" r="110" stroke="white" strokeWidth="0.5" />
           <circle cx="160" cy="160" r="65"  stroke="white" strokeWidth="0.5" />
-          {/* 8 trigram tick marks */}
           {Array.from({ length: 8 }).map((_, i) => {
             const angle = (i * 45 * Math.PI) / 180;
             const r1 = 120, r2 = 155;
@@ -227,7 +245,6 @@ function HeroBackground() {
             const x2 = 160 + r2 * Math.sin(angle), y2 = 160 - r2 * Math.cos(angle);
             return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="white" strokeWidth="1" />;
           })}
-          {/* Yin-yang inspired center circle */}
           <circle cx="160" cy="160" r="28" fill="none" stroke="white" strokeWidth="0.5" />
           <circle cx="160" cy="146" r="7" fill="white" fillOpacity="0.5" />
           <circle cx="160" cy="174" r="7" fill="none" stroke="white" strokeWidth="0.5" />
@@ -235,7 +252,7 @@ function HeroBackground() {
       </div>
 
       {/* Left decorative trigram lines */}
-      <div className="absolute left-[6%] bottom-[20%] opacity-[0.07] flex flex-col gap-3">
+      <div className="absolute left-[6%] bottom-[20%] opacity-[0.15] flex flex-col gap-3" style={{ filter: 'drop-shadow(0 0 4px rgba(139,124,246,0.6))' }}>
         {["full", "full", "broken", "full", "broken", "broken"].map((t, i) => (
           <div key={i} className="flex gap-2">
             {t === "full" ? (
@@ -258,22 +275,30 @@ function HeroBackground() {
 // ─────────────────────────────────────────────
 export default function HomePage() {
   return (
-    <main className="bg-[#0d0b1e] text-white">
+    <main className="relative z-10 bg-[#0d0b1e] text-white">
       {/* ══════════════════════════════════════
           HERO SECTION
       ══════════════════════════════════════ */}
       <section className="relative min-h-screen flex items-center justify-center px-4 pt-20 pb-32 overflow-hidden">
         <HeroBackground />
+        <StarField />
 
         <div className="relative z-10 text-center max-w-4xl mx-auto">
-          {/* Pill badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#5749F4]/30 bg-[#5749F4]/10 px-4 py-1.5 text-sm text-[#A78BFA] mb-8 backdrop-blur-sm">
+
+          {/* Pill badge — 入场延迟 0s */}
+          <div
+            className="hero-badge animate-fade-in-up inline-flex items-center gap-2 rounded-full border border-[#5749F4]/30 bg-[#5749F4]/10 px-4 py-1.5 text-sm text-[#A78BFA] mb-8 backdrop-blur-sm"
+            style={{ animationDelay: "0s" }}
+          >
             <Sparkles className="h-3.5 w-3.5" />
             东方命理 × 现代心理学双轨解读
           </div>
 
-          {/* Main title */}
-          <h1 className="mb-6 font-serif text-[clamp(3.5rem,10vw,7rem)] font-bold leading-none tracking-wider">
+          {/* Main title — 入场延迟 0.15s */}
+          <h1
+            className="hero-title animate-fade-in-up mb-6 font-serif text-[clamp(3.5rem,10vw,7rem)] font-bold leading-none tracking-wider"
+            style={{ animationDelay: "0.15s" }}
+          >
             <span
               className="inline-block"
               style={{
@@ -288,18 +313,27 @@ export default function HomePage() {
             </span>
           </h1>
 
-          {/* Subtitle */}
-          <p className="mb-4 text-[clamp(1.1rem,3vw,1.5rem)] font-light tracking-[0.25em] text-white/60">
+          {/* Subtitle — 入场延迟 0.3s */}
+          <p
+            className="hero-subtitle animate-fade-in-up mb-4 text-[clamp(1.1rem,3vw,1.5rem)] font-light tracking-[0.25em] text-white/60"
+            style={{ animationDelay: "0.3s" }}
+          >
             观己知序，安住当下
           </p>
 
-          {/* Description */}
-          <p className="mx-auto mb-12 max-w-xl text-base leading-relaxed text-white/40">
+          {/* Description — 入场延迟 0.45s */}
+          <p
+            className="hero-desc animate-fade-in-up mx-auto mb-12 max-w-xl text-base leading-relaxed text-white/40"
+            style={{ animationDelay: "0.45s" }}
+          >
             基于东方命理哲学，结合现代心理科学，为你提供温和共情的人生参考
           </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          {/* CTA Buttons — 入场延迟 0.6s */}
+          <div
+            className="hero-cta animate-fade-in-up flex flex-col sm:flex-row items-center justify-center gap-4"
+            style={{ animationDelay: "0.6s" }}
+          >
             <Link
               href="/bazi"
               className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#5749F4] to-[#7C3AED] px-8 py-4 text-base font-semibold text-white shadow-2xl shadow-[#5749F4]/30 transition-all duration-300 hover:scale-105 hover:shadow-[#5749F4]/50"
@@ -316,8 +350,11 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {/* Social proof */}
-          <div className="mt-14 flex flex-wrap items-center justify-center gap-6 text-sm text-white/30">
+          {/* Social proof — 入场延迟 0.75s */}
+          <div
+            className="hero-social-proof animate-fade-in-up mt-14 flex flex-wrap items-center justify-center gap-6 text-sm text-white/30"
+            style={{ animationDelay: "0.75s" }}
+          >
             <div className="flex items-center gap-2">
               <Users className="h-4 w-4" />
               <span>已有 <strong className="text-white/60">12万+</strong> 用户在使用</span>
@@ -366,12 +403,13 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Fortune Grid */}
+            {/* Fortune Grid — fortune-card 入场动画，各卡片延迟错落 */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              {TODAY_FORTUNE.map(({ icon: Icon, label, stars, tip }) => (
+              {TODAY_FORTUNE.map(({ icon: Icon, label, stars, tip }, idx) => (
                 <div
                   key={label}
-                  className="group relative rounded-2xl border border-white/8 bg-white/3 p-5 hover:border-[#5749F4]/30 hover:bg-[#5749F4]/5 transition-all duration-300"
+                  className="fortune-card animate-fade-in-up group relative rounded-2xl border border-white/8 bg-white/3 p-5 hover:border-[#5749F4]/30 hover:bg-[#5749F4]/5 transition-all duration-300"
+                  style={{ animationDelay: `${0.1 + idx * 0.12}s` }}
                 >
                   <div className="mb-3 flex items-center justify-between">
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#5749F4]/15">
@@ -420,8 +458,9 @@ export default function HomePage() {
                 key={title}
                 className="group relative flex flex-col rounded-3xl border border-white/10 bg-[#13102a] p-8 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5749F4]/10 overflow-hidden"
               >
-                {/* Top gradient bar */}
-                <div className={`absolute top-0 left-0 right-0 h-px bg-gradient-to-r ${gradient}`} />
+                {/* Top gradient bar — hover 时触发 shimmer 扫光
+                    feature-card-bar 由 globals.css 控制，.group:hover 触发动画 */}
+                <div className={`feature-card-bar absolute top-0 left-0 right-0 h-px bg-gradient-to-r ${gradient}`} />
 
                 {/* Badge */}
                 {badge && (

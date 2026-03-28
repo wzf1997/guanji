@@ -8,34 +8,34 @@ const WU_XING_STYLE: Record<
   { tg: string; dz: string; badge: string; glow: string }
 > = {
   木: {
-    tg: "text-green-600 dark:text-green-400",
-    dz: "text-green-700 dark:text-green-300",
-    badge: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
-    glow: "shadow-green-100 dark:shadow-green-900/30",
+    tg: "text-green-400",
+    dz: "text-green-300",
+    badge: "bg-green-900/40 text-green-300",
+    glow: "shadow-green-900/30",
   },
   火: {
-    tg: "text-red-600 dark:text-red-400",
-    dz: "text-red-700 dark:text-red-300",
-    badge: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
-    glow: "shadow-red-100 dark:shadow-red-900/30",
+    tg: "text-red-400",
+    dz: "text-red-300",
+    badge: "bg-red-900/40 text-red-300",
+    glow: "shadow-red-900/30",
   },
   土: {
-    tg: "text-yellow-600 dark:text-yellow-400",
-    dz: "text-yellow-700 dark:text-yellow-300",
-    badge: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300",
-    glow: "shadow-yellow-100 dark:shadow-yellow-900/30",
+    tg: "text-yellow-400",
+    dz: "text-yellow-300",
+    badge: "bg-yellow-900/40 text-yellow-300",
+    glow: "shadow-yellow-900/30",
   },
   金: {
-    tg: "text-gray-500 dark:text-gray-300",
-    dz: "text-gray-600 dark:text-gray-200",
-    badge: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300",
-    glow: "shadow-gray-100 dark:shadow-gray-800/30",
+    tg: "text-gray-300",
+    dz: "text-gray-200",
+    badge: "bg-gray-800 text-gray-300",
+    glow: "shadow-gray-800/30",
   },
   水: {
-    tg: "text-blue-600 dark:text-blue-400",
-    dz: "text-blue-700 dark:text-blue-300",
-    badge: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
-    glow: "shadow-blue-100 dark:shadow-blue-900/30",
+    tg: "text-blue-400",
+    dz: "text-blue-300",
+    badge: "bg-blue-900/40 text-blue-300",
+    glow: "shadow-blue-900/30",
   },
 };
 
@@ -58,7 +58,7 @@ function PillarCard({
     <div
       className={`relative flex flex-col items-center rounded-2xl border bg-[var(--card)] overflow-hidden transition-shadow ${
         isDay
-          ? "border-[var(--primary)] shadow-lg shadow-purple-100 dark:shadow-purple-900/30 ring-2 ring-[var(--primary)]/20"
+          ? "border-[var(--primary)] shadow-lg shadow-purple-900/30 ring-2 ring-[var(--primary)]/20"
           : "border-[var(--border)] hover:shadow-md"
       } ${s.glow}`}
     >

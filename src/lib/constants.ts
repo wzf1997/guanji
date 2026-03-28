@@ -15,10 +15,51 @@ export const COMPLIANCE_TEXT =
 export const NAV_LINKS = [
   { href: "/fortune", label: "每日运势", icon: "Star" },
   { href: "/bazi", label: "八字排盘", icon: "BookOpen" },
+  { href: "/mbti", label: "MBTI测试", icon: "Brain" },
+  { href: "/zodiac", label: "星座罗盘", icon: "Compass" },
+  { href: "/match", label: "缘分配对", icon: "Heart" },
   { href: "/ai-chat", label: "AI对话", icon: "MessageCircle" },
   { href: "/profile", label: "个人档案", icon: "User" },
   { href: "/membership", label: "会员", icon: "Crown" },
 ] as const;
+
+// 12星座
+export const ZODIAC_SIGNS = [
+  "aries", "taurus", "gemini", "cancer",
+  "leo", "virgo", "libra", "scorpio",
+  "sagittarius", "capricorn", "aquarius", "pisces",
+] as const;
+
+export const ZODIAC_CN: Record<string, string> = {
+  aries: "白羊座", taurus: "金牛座", gemini: "双子座",
+  cancer: "巨蟹座", leo: "狮子座", virgo: "处女座",
+  libra: "天秤座", scorpio: "天蝎座", sagittarius: "射手座",
+  capricorn: "摩羯座", aquarius: "水瓶座", pisces: "双鱼座",
+};
+
+// MBTI 16种人格
+export const MBTI_TYPES = [
+  "INTJ", "INTP", "ENTJ", "ENTP",
+  "INFJ", "INFP", "ENFJ", "ENFP",
+  "ISTJ", "ISFJ", "ESTJ", "ESFJ",
+  "ISTP", "ISFP", "ESTP", "ESFP",
+] as const;
+
+// MBTI 人格中文名
+export const MBTI_NAMES: Record<string, string> = {
+  INTJ: "建筑师", INTP: "逻辑学家", ENTJ: "指挥官", ENTP: "辩论家",
+  INFJ: "提倡者", INFP: "调停者", ENFJ: "主人公", ENFP: "竞选者",
+  ISTJ: "物流师", ISFJ: "守卫者", ESTJ: "总经理", ESFJ: "执政官",
+  ISTP: "鉴赏家", ISFP: "探险家", ESTP: "企业家", ESFP: "表演者",
+};
+
+// MBTI 与五行的映射关系
+export const MBTI_FIVE_ELEMENT: Record<string, string> = {
+  INTJ: "水", INTP: "水", ENTJ: "金", ENTP: "木",
+  INFJ: "水", INFP: "木", ENFJ: "火", ENFP: "火",
+  ISTJ: "土", ISFJ: "土", ESTJ: "金", ESFJ: "土",
+  ISTP: "金", ISFP: "木", ESTP: "火", ESFP: "火",
+};
 
 // 会员等级
 export const MEMBERSHIP_TIERS = {

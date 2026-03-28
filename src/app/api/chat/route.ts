@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-// import { getServerSession } from "next-auth";
-// import { authOptions } from "../auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { decrementAiChatQuota, refundAiChatQuota } from "@/lib/db/users";
+import { quotaExhausted, unauthorized } from "@/lib/utils/response";
 
 const SYSTEM_PROMPT = `你是「观己」平台的AI命理师，名为「玄机」。
 你精通八字命理、紫微斗数、梅花易数等东方命理体系，同时融合现代积极心理学为用户提供温和、正向的人生参考。
@@ -26,6 +28,13 @@ function containsForbiddenWords(text: string): boolean {
 
 export async function POST(req: NextRequest) {
   try {
+    // 认证检查
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return unauthorized("请先登录后才能使用 AI 命理师");
+    }
+    const userId = (session.user as any).id as string;
+
     const body = await req.json();
     const { messages } = body as { messages: { role: string; content: string }[] };
 
@@ -40,6 +49,12 @@ export async function POST(req: NextRequest) {
         { error: "您的提问包含不合规内容，请调整后重试。" },
         { status: 400 }
       );
+    }
+
+    // AI 配额检查与扣减
+    const quotaResult = await decrementAiChatQuota(userId);
+    if (!quotaResult.success) {
+      return quotaExhausted();
     }
 
     // 构造发往豆包的消息列表（注入系统提示）
@@ -68,6 +83,8 @@ export async function POST(req: NextRequest) {
     if (!upstreamRes.ok || !upstreamRes.body) {
       const errText = await upstreamRes.text().catch(() => "unknown error");
       console.error("[chat API] upstream error:", upstreamRes.status, errText);
+      // AI 调用失败，退还配额
+      refundAiChatQuota(userId).catch(console.error);
       return NextResponse.json(
         { error: `AI 服务暂时不可用 (${upstreamRes.status})`, detail: errText },
         { status: 502 }
